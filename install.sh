@@ -38,6 +38,7 @@ sudo zypper install -y \
   btop \
   ca-certificates \
   curl \
+  fastfetch \
   yakuake \
   jose \
   keepassxc \
