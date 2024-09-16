@@ -42,8 +42,10 @@ sudo zypper install -y \
   jose \
   keepassxc \
   mozilla-nss-tools \
+  neovim \
   net-tools \
   smplayer \
+  tmux \
   transmission \
   tree \
   virtualbox
