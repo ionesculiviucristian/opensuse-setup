@@ -6,7 +6,7 @@ install_rpm() {
   RPM_INSTALLER=$(mktemp)
   wget "$1" -O ${RPM_INSTALLER}.rpm
   sudo zypper install -y ${RPM_INSTALLER}.rpm
-  rm ${RPM_INSTALLER}
+  rm -f ${RPM_INSTALLER}
 }
 
 sudo zypper refresh && sudo zypper update
@@ -39,6 +39,7 @@ sudo zypper install -y \
   ca-certificates \
   curl \
   fastfetch \
+  flatpak \
   yakuake \
   jose \
   keepassxc \
@@ -51,23 +52,13 @@ sudo zypper install -y \
   tree \
   virtualbox
 
-# Install snap
-# https://snapcraft.io/install/snap-store/opensuse
-sudo zypper addrepo --refresh https://download.opensuse.org/repositories/system:/snappy/openSUSE_Tumbleweed/ snappy && \
-sudo zypper --gpg-auto-import-keys refresh && \
-sudo zypper dup --from snappy && \
-sudo zypper install -y snapd && \
-sudo systemctl enable --now snapd && \
-sudo systemctl enable --now snapd.apparmor
+flatpak remote-add --if-not-exists --user flathub https://dl.flathub.org/repo/flathub.flatpakrepo
 
-# Install snap packages
-sudo snap install \
-  mysql-workbench-community \
-  postman \
-  smplayer
-
-snap connect mysql-workbench-community:password-manager-service && \
-snap connect mysql-workbench-community:ssh-keys
+# Install flatpak packages
+flatpak install -y flathub \
+  com.obsproject.Studio \
+  com.getpostman.Postman \
+  info.smplayer.SMPlayer
 
 # Install poetry
 curl -sSL https://install.python-poetry.org | python3 -
@@ -75,6 +66,10 @@ curl -sSL https://install.python-poetry.org | python3 -
 # Install Google Chrome
 sudo rpm --import https://dl.google.com/linux/linux_signing_key.pub
 install_rpm https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm
+
+# Install Zoom
+sudo rpm --import https://zoom.us/linux/download/pubkey?version=5-12-6
+install_rpm https://cdn.zoom.us/prod/6.2.0.1855/zoom_openSUSE_x86_64.rpm
 
 # Install nvm (Node Version Manager)
 # https://github.com/nvm-sh/nvm?tab=readme-ov-file#install--update-script
